@@ -58,7 +58,7 @@
 
     <script>
         // Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
-        const apiKey = 'a899e1ff8b7b6d0d3fbdb02ae678704f';
+        const apiKey = 'afa92ea67fe55fdfa48347e9f635fda6';
         const city = 'Barrie'; // Update with your city
 
         function fetchWeather() {
