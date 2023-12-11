@@ -1,1 +1,85 @@
-# solar-tracker
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servo Control</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        input[type="range"] {
+            width: 80%;
+            margin: 0 auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Servo Control</h1>
+    <label for="positionInput">Enter Position (0-180, increments of 10): </label>
+    <input type="number" id="positionInput" min="0" max="180" step="10">
+    
+    <label for="positionSlider">Or use the slider:</label>
+    <input type="range" id="positionSlider" min="0" max="180" step="10">
+    
+    <button onclick="sendPosition()">Set Position</button>
+
+    <script>
+        function sendPosition() {
+            var position = document.getElementById("positionInput").value;
+            if (position >= 0 && position <= 180 && position % 10 === 0) {
+                // Send a POST request to the agent with the specified position
+                fetch('https://agent.electricimp.com/j9_euFWlOzzN', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'position=' + position
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Servo position set successfully');
+                    } else {
+                        console.error('Failed to set servo position');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            } else {
+                console.error('Invalid position. Please enter a value between 0 and 180, in increments of 10.');
+            }
+        }
+
+        // Update the input field value when the slider changes
+        document.getElementById("positionSlider").addEventListener("input", function() {
+            document.getElementById("positionInput").value = this.value;
+        });
+    </script>
+</body>
+</html>
