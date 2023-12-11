@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servo Control with Weather</title>
+    <title>Servo Control</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -39,13 +39,10 @@
         button:hover {
             background-color: #45a049;
         }
-        #weatherInfo {
-            margin-top: 20px;
-        }
     </style>
 </head>
 <body>
-    <h1>Servo Control with Weather</h1>
+    <h1>Servo Control</h1>
     <label for="positionInput">Enter Position (0-180, increments of 10): </label>
     <input type="number" id="positionInput" min="0" max="180" step="10">
     
@@ -54,36 +51,35 @@
     
     <button onclick="sendPosition()">Set Position</button>
 
-    <div id="weatherInfo"></div>
-
     <script>
-        // Replace 'YOUR_API_KEY' with your actual OpenWeatherMap API key
-        const apiKey = 'afa92ea67fe55fdfa48347e9f635fda6';
-        const city = 'Barrie'; // Update with your city
-
-        function fetchWeather() {
-            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-            fetch(apiUrl)
+        function sendPosition() {
+            var position = document.getElementById("positionInput").value;
+            if (position >= 0 && position <= 180 && position % 10 === 0) {
+                // Send a POST request to the agent with the specified position
+                fetch('https://agent.electricimp.com/j9_euFWlOzzN', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'position=' + position
+                })
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    if (response.ok) {
+                        console.log('Servo position set successfully');
+                    } else {
+                        console.error('Failed to set servo position');
                     }
-                    return response.json();
                 })
-                .then(data => {
-                    if (!data.main || !data.main.temp || !data.weather || data.weather.length === 0) {
-                        throw new Error('Invalid weather data format');
-                    }
+                .catch(error => console.error('Error:', error));
+            } else {
+                console.error('Invalid position. Please enter a value between 0 and 180, in increments of 10.');
+            }
+        }
 
-                    const temperature = data.main.temp;
-                    const weatherDescription = data.weather[0].description;
-
-                    const weatherInfo = `Current Temperature: ${temperature}°C<br>Weather: ${weatherDescription}`;
-
-                    document.getElementById("weatherInfo").innerHTML = weatherInfo;
-                })
-                .catch(error => {
-                    console.error('Error fetching weather:', error.message);
-                    document.getElementById("weatherInfo").innerHTML = 'Failed to fetch weather';
-            
+        // Update the input field value when the slider changes
+        document.getElementById("positionSlider").addEventListener("input", function() {
+            document.getElementById("positionInput").value = this.value;
+        });
+    </script>
+</body>
+</html>
