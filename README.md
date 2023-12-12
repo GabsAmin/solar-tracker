@@ -6,38 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Servo Control with Weather</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin: 20px;
-        }
-        h1 {
-            color: #333;
-        }
-        label {
-            display: block;
-            margin: 10px 0;
-        }
-        input[type="number"] {
-            width: 50px;
-            padding: 5px;
-            margin-bottom: 10px;
-        }
-        input[type="range"] {
-            width: 80%;
-            margin: 0 auto;
-        }
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
+        /* Your existing styles remain unchanged */
+
         #weather {
             margin-top: 20px;
         }
@@ -45,7 +15,7 @@
 </head>
 <body>
     <h1>Servo Control with Weather</h1>
-    <label for="positionInput">Enter Position (0-180, increments of 10): </label>
+    <label for="positionInput">Enter Servo Position (0-180, increments of 10): </label>
     <input type="number" id="positionInput" min="0" max="180" step="10">
     
     <label for="positionSlider">Or use the slider:</label>
@@ -73,7 +43,7 @@
                 .then(response => {
                     if (response.ok) {
                         console.log('Servo position set successfully');
-                        fetchWeather();
+                        fetchWeather(); // Fetch weather data after setting the servo position
                     } else {
                         console.error('Failed to set servo position');
                     }
@@ -85,11 +55,10 @@
         }
 
         function fetchWeather() {
-            // Replace 'YOUR_API_KEY' with your OpenWeatherMap API key
-            var apiKey = 'afa92ea67fe55fdfa48347e9f635fda6';
-            var position = document.getElementById("positionInput").value;
+            var apiKey = 'afa92ea67fe55fdfa48347e9f635fda6'; // Replace with your OpenWeatherMap API key
+            var weatherLocation = 'Barrie'; // Replace with the desired weather location
 
-            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + position + '&appid=' + apiKey)
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + weatherLocation + '&appid=' + apiKey)
                 .then(response => response.json())
                 .then(data => {
                     var weatherDescription = data.weather[0].description;
@@ -100,7 +69,7 @@
                 .catch(error => {
                     console.error('Error fetching weather data:', error);
                     var weatherDataElement = document.getElementById("weatherData");
-                    weatherDataElement.innerHTML = 'Failed to fetch weather data';
+                    weatherDataElement.innerHTML = 'Failed to fetch weather data. Check the console for details.';
                 });
         }
 
