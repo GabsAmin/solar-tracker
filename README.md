@@ -1,4 +1,4 @@
-<!GeorgianCollege Tech Pro>
+<GeorgianCollege Tech Pro>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
