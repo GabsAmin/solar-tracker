@@ -48,12 +48,16 @@
             width: 80%;
             margin: 0 auto;
         }
+        #feedbackMessage {
+            margin-top: 10px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
     <h1>Servo Control with Weather</h1>
     <label for="positionInput">Enter Servo Position (0-180, increments of 10): </label>
-    <input type="number" id="positionInput" min="0" max="180" step="10">
+    <input type="number" id="positionInput" min="0" max="180" step="10" placeholder="Enter position">
     
     <div id="sliderContainer">
         <label for="positionSlider">Or use the slider:</label>
@@ -61,17 +65,24 @@
     </div>
     
     <button onclick="sendPosition()">Set Position</button>
+    <button onclick="resetForm()">Reset</button>
 
     <div id="weather">
         <h2>Weather Information</h2>
         <p id="weatherData">Loading weather data...</p>
     </div>
 
+    <p id="feedbackMessage"></p>
+
     <script>
         function sendPosition() {
             var position = document.getElementById("positionInput").value;
+            var feedbackMessageElement = document.getElementById("feedbackMessage");
+
             if (position >= 0 && position <= 180 && position % 10 === 0) {
                 // Send a POST request to the agent with the specified position
+                feedbackMessageElement.innerText = 'Setting servo position...';
+                
                 fetch('https://agent.electricimp.com/j9_euFWlOzzN', {
                     method: 'POST',
                     headers: {
@@ -82,14 +93,20 @@
                 .then(response => {
                     if (response.ok) {
                         console.log('Servo position set successfully');
+                        feedbackMessageElement.innerText = 'Servo position set successfully';
                         fetchWeather(); // Fetch weather data after setting the servo position
                     } else {
                         console.error('Failed to set servo position');
+                        feedbackMessageElement.innerText = 'Failed to set servo position';
                     }
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    console.error('Error:', error);
+                    feedbackMessageElement.innerText = 'Error. Check the console for details.';
+                });
             } else {
                 console.error('Invalid position. Please enter a value between 0 and 180, in increments of 10.');
+                feedbackMessageElement.innerText = 'Invalid position. Please enter a value between 0 and 180, in increments of 10.';
             }
         }
 
@@ -110,6 +127,13 @@
                     var weatherDataElement = document.getElementById("weatherData");
                     weatherDataElement.innerHTML = 'Failed to fetch weather data. Check the console for details.';
                 });
+        }
+
+        function resetForm() {
+            document.getElementById("positionInput").value = '';
+            document.getElementById("positionSlider").value = '';
+            document.getElementById("weatherData").innerHTML = 'Loading weather data...';
+            document.getElementById("feedbackMessage").innerText = '';
         }
 
         document.getElementById("positionSlider").addEventListener("input", function() {
