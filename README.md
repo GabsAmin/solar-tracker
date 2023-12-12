@@ -6,10 +6,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Servo Control with Weather</title>
     <style>
-        /* Your existing styles remain unchanged */
-
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="number"] {
+            width: 50px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        input[type="range"] {
+            width: 80%;
+            margin: 0 auto;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
         #weather {
             margin-top: 20px;
+        }
+        #sliderContainer {
+            margin-top: 10px;
+        }
+        #positionSlider {
+            width: 80%;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -18,8 +55,10 @@
     <label for="positionInput">Enter Servo Position (0-180, increments of 10): </label>
     <input type="number" id="positionInput" min="0" max="180" step="10">
     
-    <label for="positionSlider">Or use the slider:</label>
-    <input type="range" id="positionSlider" min="0" max="180" step="10">
+    <div id="sliderContainer">
+        <label for="positionSlider">Or use the slider:</label>
+        <input type="range" id="positionSlider" min="0" max="180" step="10">
+    </div>
     
     <button onclick="sendPosition()">Set Position</button>
 
