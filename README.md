@@ -10,9 +10,11 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 20px;
+            background-color: #f5f5f5;
+            color: #333;
         }
         h1, h2 {
-            color: #333;
+            color: #008080; /* Teal color for headers */
         }
         label {
             display: block;
@@ -42,6 +44,11 @@
             margin-top: 20px;
             border: 1px solid #ccc;
             padding: 10px;
+            background-color: #fff;
+        }
+        #weather-description, #temperature {
+            font-size: 18px; /* Increased font size for temperature */
+            color: #333;
         }
     </style>
 </head>
