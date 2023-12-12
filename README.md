@@ -101,8 +101,8 @@
 
             // Fetch weather information from OpenWeatherMap API
             function fetchWeather() {
-                const apiKey = 'YOUR_API_KEY'; // Replace with your OpenWeatherMap API key
-                const city = 'YOUR_CITY'; // Replace with your desired city
+                const apiKey = 'afa92ea67fe55fdfa48347e9f635fda6'; // Replace with your OpenWeatherMap API key
+                const city = 'Barrie'; // Replace with your desired city
                 const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
                 fetch(apiUrl)
