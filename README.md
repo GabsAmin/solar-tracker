@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Servo Control</title>
+    <title>Servo Control with Weather</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -39,10 +38,13 @@
         button:hover {
             background-color: #45a049;
         }
+        #weather {
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Servo Control</h1>
+    <h1>Servo Control with Weather</h1>
     <label for="positionInput">Enter Position (0-180, increments of 10): </label>
     <input type="number" id="positionInput" min="0" max="180" step="10">
     
@@ -50,6 +52,11 @@
     <input type="range" id="positionSlider" min="0" max="180" step="10">
     
     <button onclick="sendPosition()">Set Position</button>
+
+    <div id="weather">
+        <h2>Weather Information</h2>
+        <p id="weatherData">Loading weather data...</p>
+    </div>
 
     <script>
         function sendPosition() {
@@ -66,6 +73,7 @@
                 .then(response => {
                     if (response.ok) {
                         console.log('Servo position set successfully');
+                        fetchWeather();
                     } else {
                         console.error('Failed to set servo position');
                     }
@@ -76,9 +84,29 @@
             }
         }
 
-        // Update the input field value when the slider changes
+        function fetchWeather() {
+            // Replace 'YOUR_API_KEY' with your OpenWeatherMap API key
+            var apiKey = 'afa92ea67fe55fdfa48347e9f635fda6';
+            var position = document.getElementById("positionInput").value;
+
+            fetch('https://api.openweathermap.org/data/2.5/weather?q=' + position + '&appid=' + apiKey)
+                .then(response => response.json())
+                .then(data => {
+                    var weatherDescription = data.weather[0].description;
+                    var temperature = (data.main.temp - 273.15).toFixed(2);
+                    var weatherDataElement = document.getElementById("weatherData");
+                    weatherDataElement.innerHTML = 'Weather: ' + weatherDescription + '<br>Temperature: ' + temperature + '°C';
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                    var weatherDataElement = document.getElementById("weatherData");
+                    weatherDataElement.innerHTML = 'Failed to fetch weather data';
+                });
+        }
+
         document.getElementById("positionSlider").addEventListener("input", function() {
             document.getElementById("positionInput").value = this.value;
+            fetchWeather();
         });
     </script>
 </body>
